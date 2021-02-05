@@ -7,7 +7,7 @@ const RefundAsset = require("../transactions/RefundAsset");
 class RestaurantModule extends BaseModule{
     name = "restaurant";
     id = 1000;
-    transactionAssets = [new FoodAsset(), new MenuAsset(), new RefundAsset()];
+    //transactionAssets = [new FoodAsset(), new MenuAsset(), new RefundAsset()];
 
     accountSchema = {
         type: "object",

@@ -26,6 +26,9 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
 	logger: {
 		consoleLogLevel: 'info',
 	},
+	network: {
+		port: 5010
+	}
 });
 
 // 5.Initialize the application with genesis block and application config
