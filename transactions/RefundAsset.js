@@ -24,8 +24,6 @@ class RefundAsset extends BaseAsset {
         }
     }
 
-    constructor(){}
-
     static get TYPE() {
         return RefundAssetId;
     }    

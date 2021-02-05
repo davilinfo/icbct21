@@ -55,9 +55,7 @@ class FoodAsset extends BaseAsset {
                 fieldNumber: 10
             }
         }
-    }
-
-    constructor(){}
+    } 
 
     get sidechainAddress () {
         return "6181773985994883123L";
