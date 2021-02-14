@@ -1,7 +1,15 @@
-import axios from 'axios';
-
-const api = axios.create({
-    baseURL : 'http://www.liskrestaurant.com:3333'
-});
-
-export default api;
+const { createWSClient } = require('@liskhq/lisk-api-client');
+let clientCache;
+export const getClient = async () => {
+    if (!clientCache) {
+        clientCache = await createWSClient('ws://localhost:8080/ws');
+    }
+    return clientCache;
+};
+export const useClient = async () => {
+    const client = await getClient();
+    const { blockAtHeight123 }= await client.invoke('app:getBlockByHeight', { height:123 });
+    client.subscribe('app:block:new', ( data ) => {
+      console.log(data);
+    });
+};
