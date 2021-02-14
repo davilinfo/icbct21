@@ -11,15 +11,14 @@ const accounts = {
 const api = new Api();
 
 const createTransaction = async () => {
-    const client = await api.getClient();
-
+    const client = await api.getClient();    
     const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
         fee: BigInt(transactions.convertLSKToBeddows('0.01')),
         asset: {
-            amount: BigInt(0),
+            amount: BigInt(5000000),
             recipientAddress: address,
             data: 'ok',
         },
@@ -28,14 +27,15 @@ const createTransaction = async () => {
     return tx;
 }
 
-
-
-const postResult = async() => {
-    const newTx = await createTransaction();
-    const response = await client.transaction.send(newTx); 
-    console.log(response);
+const postResult = async() => {    
+    const newTx = await createTransaction();            
+                
+    setInterval(async function(){
+        const client = await api.getClient();
+        const response = await client.transaction.send(newTx); 
+        console.log(response);
+    }, 500);            
 }
 
-setInterval(function(){
-    postResult();
-}, 70);
+
+postResult();

@@ -1,5 +1,7 @@
 const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = 'ws://localhost:5010/ws';
+const RPC_ENDPOINT = 'ws://localhost:5011/ws';
+const Api = require('./api.js');
+const Accounts = require('../accounts/CreateAccount');
 const { exception } = require('console');
 const accounts = { 
     "genesis": {
@@ -7,32 +9,31 @@ const accounts = {
     }
 };
 
-let clientCache;
+const api = new Api();
 
-export const getClient = async () => {
-    if (!clientCache) {
-        clientCache = await apiClient.createWSClient(RPC_ENDPOINT);
-    }
-    return clientCache;
-};
-
-const postResult = async(tx) => {
+const createTransaction = async () => {
+    const client = await api.getClient();    
     const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
-        moduleID: 1000,
+        moduleID: 2,
         assetID: 0,
         fee: BigInt(transactions.convertLSKToBeddows('0.01')),
         asset: {
-            amount: BigInt(0),
+            amount: BigInt(5000000),
             recipientAddress: address,
-            data: '',
+            data: 'ok',
         },
     }, accounts.genesis.passphrase);
-    
-    const response = await client.transaction.send(tx); 
+
+    return tx;
+}
+
+const postResult = async() => {    
+    const newTx = await createTransaction();
+    const response = await client.transaction.send(newTx); 
     console.log(response);
 }
 
 setInterval(function(){
-    postResult(tx);
+    postResult();
 }, 70);
