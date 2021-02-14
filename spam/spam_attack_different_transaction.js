@@ -18,7 +18,7 @@ const createAccount = async () => {
 
     const client = await api.getClient();    
     const address = cryptography.getAddressFromBase32Address(newCredential.address);
-    const tx = await client.transaction.create({ 
+    var tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
         fee: BigInt(transactions.convertLSKToBeddows('0.01')),
@@ -29,7 +29,7 @@ const createAccount = async () => {
         },
     }, accounts.genesis.passphrase);
 
-    await client.transaction.send(tx); 
+    console.log(await client.transaction.send(tx)); 
 
     return newCredential;
 }
@@ -51,14 +51,37 @@ const createTransaction = async (credential) => {
     return tx;
 }
 
+var listCredentials = [];
+var count = 0;
+
+const preResult = async() => {            
+    while (count < 200) {        
+        var credential = await createAccount();
+        listCredentials.push(credential);
+        count ++;
+    }
+}
+
 const postResult = async() => {    
     const client = await api.getClient(); 
-    const credential = await createAccount();
+    
+    await preResult();    
+
     const newTx = await createTransaction(credential);
     const response = await client.transaction.send(newTx); 
     console.log(response);
 }
 
-setInterval(function(){
-    postResult();
-}, 500);
+preResult();
+
+var countTransactions = 0;
+var countAccounts = listCredentials.length-1;
+
+while (countAccounts > 0){
+    while (countTransactions < 50){
+        postResult(listCredentials[countAccounts]);
+        countTransactions++;
+    }
+    countTransactions = 0;
+    countAccounts--;
+}
