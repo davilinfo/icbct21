@@ -26,6 +26,13 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
 	logger: {
 		consoleLogLevel: 'info',
 	},
+	rpc: {
+        enable: true,
+        mode:'ws',
+        // Default: 8080
+        // In case of `mode` is set to `ws`, this port used
+        port: 5011
+	},
 	network: {
 		port: 5010
 	}
