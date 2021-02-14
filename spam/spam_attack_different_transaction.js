@@ -13,7 +13,7 @@ const api = new Api();
 
 const createAccount = async () => {
     const account = new Account();
-    var newCredential = account.newCredentials();
+    var newCredential = await account.newCredentials();
     console.log(newCredential);
 
     const client = await api.getClient();    
@@ -28,6 +28,8 @@ const createAccount = async () => {
             data: 'ok',
         },
     }, accounts.genesis.passphrase);
+
+    await client.transaction.send(tx); 
 
     return newCredential;
 }
@@ -50,6 +52,7 @@ const createTransaction = async (credential) => {
 }
 
 const postResult = async() => {    
+    const client = await api.getClient(); 
     const credential = await createAccount();
     const newTx = await createTransaction(credential);
     const response = await client.transaction.send(newTx); 
