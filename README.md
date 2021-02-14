@@ -9,11 +9,6 @@ commands:
 sudo apt update
 sudo apt install -y libtool automake autoconf curl build-essential python-minimal
 
-/*if you don't have docker installed yet*/
-sudo apt-get install docker.io
-/*setup a postgres instance for lisk db running on port 5435*/
-sudo docker run --name restaurant_sidechain -p5435:5432 -e POSTGRES_USER=lisk -e POSTGRES_PASSWORD=lisk -e POSTGRES_DB=lisk_dev -d postgres:10
-
 /*create a lisk user and login into it*/
 sudo adduser lisk
 
@@ -21,15 +16,15 @@ sudo adduser lisk
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 /*run*/
-nvm install 10.15.3
+nvm install 12.20
 
 /*install pm2*/
 npm install -g pm2
 
 /*clone restaurant_sidechain repository*/
-git clone https://github.com/davilinfo/restaurant_sidechain.git
+git clone https://github.com/davilinfo/icbct21.git
 
-/*run npm ci from inside restaurant_sidechain folder*/
+/*run npm ci from inside icbct21 folder*/
 npm ci
 
 /*verify index.js file if it suits your needs and run the sidechain. By default delegates run inside unique node with attribute force = true. Run*/ node index.js
