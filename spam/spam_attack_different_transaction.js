@@ -25,7 +25,7 @@ const createAccount = async () => {
         assetID: 0,
         fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
         asset: {
-            amount: BigInt(5000000),
+            amount: BigInt(15000000),
             recipientAddress: address,
             data: 'ok',
         },
@@ -36,11 +36,9 @@ const createAccount = async () => {
     return newCredential;
 }
 
-var transactionFee = 0.01;
-
 const createTransaction = async (credential) => {
     const client = await api.getClient();    
-    const address = cryptography.getAddressFromBase32Address(credential.address);
+    const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
@@ -50,8 +48,8 @@ const createTransaction = async (credential) => {
             recipientAddress: address,
             data: 'ok',
         },
-    }, accounts.genesis.passphrase);
-    console.log(tx);
+    }, credential.passphrase);
+    //console.log(tx);
     return tx;
 }
 
@@ -59,15 +57,47 @@ var listCredentials = [];
 var count = 0;
 
 const preResult = async() => {            
-    while (count < 200) {        
+    while (count < 99) {        
         var credential = await createAccount();
         listCredentials.push(credential);
         accountFee = accountFee + 0.01;
+        accountFee = parseFloat(accountFee.toPrecision(2));
+        console.log(accountFee);
         count ++;
+    }
+    console.log("concluded accounts preparation");    
+    console.log("preparang to spam transactions");    
+
+    var objTimeout = setTimeout(() => {            
+        waitToExecuteTransactions();
+        }, 500000);
+
+    objTimeout.ref();
+}
+
+var transactionFee = 0.01;
+
+const waitToExecuteTransactions = () =>{
+    var countTransactions = 0;
+    var countAccounts = 0;
+    console.log("accounts: ".concat(countAccounts));    
+    while (countAccounts < listCredentials.length -1){        
+        var objTransactionTimeout = setTimeout(() => { 
+            while (countTransactions < 50){
+                postResult(listCredentials[countAccounts]);
+                countTransactions++;
+                transactionFee = transactionFee + 0.01;
+                transactionFee = parseFloat(transactionFee.toPrecision(2));
+                console.log(transactionFee);
+            }
+        }, 5000);
+        objTransactionTimeout.ref();
+        countTransactions = 0;
+        countAccounts++;
     }
 }
 
-const postResult = async() => {    
+const postResult = async(credential) => {    
     const client = await api.getClient();            
 
     const newTx = await createTransaction(credential);
@@ -76,16 +106,3 @@ const postResult = async() => {
 }
 
 preResult();
-
-var countTransactions = 0;
-var countAccounts = listCredentials.length-1;
-
-while (countAccounts > 0){
-    while (countTransactions < 50){
-        postResult(listCredentials[countAccounts]);
-        countTransactions++;
-        transactionFee = transactionFee + 0.01;
-    }
-    countTransactions = 0;
-    countAccounts--;
-}
