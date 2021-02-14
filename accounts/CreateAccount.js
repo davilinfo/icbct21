@@ -17,4 +17,4 @@ class Account{
     };    
 }
 
-module.exports = newCredentials;
+module.exports = Account;
