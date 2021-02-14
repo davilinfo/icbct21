@@ -33,7 +33,7 @@ class RestaurantInfo {
 
     static getRestaurantPublicKey(){
         return cryptography.getAddressAndPublicKeyFromPassphrase(restaurantPassphrase).publicKey;
-    }
+    }    
 }
 
 module.exports = RestaurantInfo;

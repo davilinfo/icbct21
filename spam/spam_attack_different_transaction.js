@@ -17,7 +17,7 @@ export const getClient = async () => {
 };
 
 const postResult = async(tx) => {
-    const address = cryptography.getAddressFromBase32Address('5a1bbf533db37fa24c67467e751b85f5dcc0315a');
+    const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
         moduleID: 1000,
         assetID: 0,

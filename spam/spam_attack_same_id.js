@@ -1,6 +1,6 @@
 const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
 const RPC_ENDPOINT = 'ws://localhost:5011/ws';
-import * as api from './api.js';
+const Api = require('./api.js');
 const { exception } = require('console');
 const accounts = { 
     "genesis": {
@@ -8,10 +8,12 @@ const accounts = {
     }
 };
 
+const api = new Api();
+
 const createTransaction = async () => {
     const client = await api.getClient();
 
-    const address = cryptography.getAddressFromBase32Address('5a1bbf533db37fa24c67467e751b85f5dcc0315a');
+    const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
@@ -19,7 +21,7 @@ const createTransaction = async () => {
         asset: {
             amount: BigInt(0),
             recipientAddress: address,
-            data: '',
+            data: 'ok',
         },
     }, accounts.genesis.passphrase);
 
