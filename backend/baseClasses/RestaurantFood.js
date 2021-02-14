@@ -1,6 +1,5 @@
+import { cryptography, transactions } from '@liskhq/lisk-client';
 const { EPOCH_TIME } = require ("@liskhq/lisk-constants");
-const { getAddressFromPassphrase } = require ("@liskhq/lisk-cryptography");
-const transactions = require("@liskhq/lisk-transactions");
 const blockchainClient = require ("../APIClient/blockchainClient");
 const FoodRequest = require("../../transactions/FoodTransaction");
 const ResultSchema = require("../models/result");
@@ -29,7 +28,7 @@ class RestaurantFood{
     }
 
     getAccount(passphrase){
-        const address = getAddressFromPassphrase(passphrase);
+        const address = cryptography.getAddressFromPassphrase(passphrase);
         return blockchainClient.accounts.get({ address, limit: 1 });
     }        
 

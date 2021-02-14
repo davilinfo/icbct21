@@ -21,8 +21,18 @@ class MenuAsset extends BaseAsset {
     }
 
     get sidechainAddress () {
-        return "6181773985994883123L";
+        return "e719a29927ae200a5926a0de1d40131c2069644a";
     }
+
+    /*
+    {
+        address: 'lskjjodmb4nq2uzke4bkc8xduztcuubrav68wx95z',
+        binaryAddress: 'e719a29927ae200a5926a0de1d40131c2069644a',
+        passphrase: 'aspect disease author forward recall hub spoon grape output shuffle mesh scale',
+        publicKey: '140b3023ad7f0bea3a05dbf7f981098c652928588179b7815e53aeaa841e5a39',
+        privateKey: 'aecb5b6475def07da6088f289e88a742cd5569f4e4bb110ee28c777c23bee48f140b3023ad7f0bea3a05dbf7f981098c652928588179b7815e53aeaa841e5a39'
+    }
+    */
 
     static get TYPE() {
         return MenuAssetId;

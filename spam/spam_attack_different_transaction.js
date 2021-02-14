@@ -16,7 +16,8 @@ export const getClient = async () => {
     return clientCache;
 };
 
-const address = cryptography.getAddressFromBase32Address('5a1bbf533db37fa24c67467e751b85f5dcc0315a');
+const postResult = async(tx) => {
+    const address = cryptography.getAddressFromBase32Address('5a1bbf533db37fa24c67467e751b85f5dcc0315a');
     const tx = await client.transaction.create({ 
         moduleID: 1000,
         assetID: 0,
@@ -27,8 +28,6 @@ const address = cryptography.getAddressFromBase32Address('5a1bbf533db37fa24c6746
             data: '',
         },
     }, accounts.genesis.passphrase);
-
-const postResult = async(tx) => {
     
     const response = await client.transaction.send(tx); 
     console.log(response);
