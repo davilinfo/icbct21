@@ -11,6 +11,8 @@ const accounts = {
 
 const api = new Api();
 
+var accountFee = 0.01;
+
 const createAccount = async () => {
     const account = new Account();
     var newCredential = await account.newCredentials();
@@ -21,7 +23,7 @@ const createAccount = async () => {
     var tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
-        fee: BigInt(transactions.convertLSKToBeddows('0.01')),
+        fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
         asset: {
             amount: BigInt(5000000),
             recipientAddress: address,
@@ -34,20 +36,22 @@ const createAccount = async () => {
     return newCredential;
 }
 
+var transactionFee = 0.01;
+
 const createTransaction = async (credential) => {
     const client = await api.getClient();    
     const address = cryptography.getAddressFromBase32Address(credential.address);
     const tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
-        fee: BigInt(transactions.convertLSKToBeddows('0.01')),
+        fee: BigInt(transactions.convertLSKToBeddows(transactionFee.toString())),
         asset: {
             amount: BigInt(0),
             recipientAddress: address,
             data: 'ok',
         },
     }, accounts.genesis.passphrase);
-
+    console.log(tx);
     return tx;
 }
 
@@ -58,14 +62,13 @@ const preResult = async() => {
     while (count < 200) {        
         var credential = await createAccount();
         listCredentials.push(credential);
+        accountFee = accountFee + 0.01;
         count ++;
     }
 }
 
 const postResult = async() => {    
-    const client = await api.getClient(); 
-    
-    await preResult();    
+    const client = await api.getClient();            
 
     const newTx = await createTransaction(credential);
     const response = await client.transaction.send(newTx); 
@@ -81,6 +84,7 @@ while (countAccounts > 0){
     while (countTransactions < 50){
         postResult(listCredentials[countAccounts]);
         countTransactions++;
+        transactionFee = transactionFee + 0.01;
     }
     countTransactions = 0;
     countAccounts--;
