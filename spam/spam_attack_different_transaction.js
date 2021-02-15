@@ -1,5 +1,5 @@
 const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = 'ws://3.138.69.164:5011/ws';
+const RPC_ENDPOINT = 'ws://localhost:5011/ws';
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
 const { exception } = require('console');
