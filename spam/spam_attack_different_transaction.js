@@ -1,8 +1,9 @@
 const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = 'ws://localhost:5011/ws';
+const RPC_ENDPOINT = 'ws://3.138.69.164:5011/ws';
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
 const { exception } = require('console');
+const { exit } = require('process');
 const accounts = { 
     "genesis": {
       "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
@@ -78,22 +79,26 @@ const preResult = async() => {
 const waitToExecuteTransactions = async () =>{
     var countTransactions = 0;
     var countAccounts = 0;    
-    console.log("accounts: ".concat(countAccounts));    
+    console.log("accounts: ".concat(listCredentials.length));    
     while (listCredentials.length > 0){   
         transactionFee = 0.01;   
         var actualCredential = listCredentials.pop();
         console.log(actualCredential);
         console.log("executed accounts:".concat(countAccounts));
-        //var objTransactionTimeout = setTimeout(async () => { 
+        
         while (countTransactions < 49){
+            try{
             await postResult(actualCredential, transactionFee);
             countTransactions++;
             transactionFee = transactionFee + 0.01;
             transactionFee = parseFloat(transactionFee.toPrecision(2));
             console.log(transactionFee);
+            }catch (e){
+                console.log(e);
+                exit(0);
+            }
         }
-        //}, 5000);        
-        //objTransactionTimeout.ref();
+        
         countTransactions = 0;
         countAccounts++;
     }
