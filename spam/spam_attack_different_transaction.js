@@ -14,17 +14,25 @@ const api = new Api();
 
 var accountFee = 0.01;
 
-const createAccount = async () => {
+const getAccountNonce = async(address) => {
+    console.log(address);
+
+    const nonce = await api.getAccountNonce(address);    
+	return Number(nonce);
+}
+
+const createAccount = async (nonce) => {
     const account = new Account();
     var newCredential = await account.newCredentials();
-    console.log(newCredential);
-
-    const client = await api.getClient();    
+    console.log(newCredential);    
+    const client = await api.getClient();          
     const address = cryptography.getAddressFromBase32Address(newCredential.address);
+
     var tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
-        fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
+        fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())), 
+        nonce: BigInt(nonce),
         asset: {
             amount: BigInt(100000000),
             recipientAddress: address,
@@ -37,13 +45,14 @@ const createAccount = async () => {
     return newCredential;
 }
 
-const createTransaction = async (credential, transactionFee) => {
-    const client = await api.getClient();    
+const createTransaction = async (credential, transactionFee, nonce) => {
+    const client = await api.getClient();       
     const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
         fee: BigInt(transactions.convertLSKToBeddows(transactionFee.toString())),
+        nonce: BigInt(nonce),
         asset: {
             amount: BigInt(0),
             recipientAddress: address,
@@ -55,11 +64,15 @@ const createTransaction = async (credential, transactionFee) => {
 }
 
 var listCredentials = [];
-var count = 0;
+var count = 1;
 
 const preResult = async() => {            
-    while (count < 99) {        
-        var credential = await createAccount();
+    while (count <= 2) {        
+        const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
+        console.log('account nonce:'.concat(accountNonce));
+        const nonce = parseInt(accountNonce) + count;
+        console.log(nonce);
+        var credential = await createAccount(nonce);
         listCredentials.push(credential);
         accountFee = accountFee + 0.01;
         accountFee = parseFloat(accountFee.toPrecision(2));
@@ -67,7 +80,7 @@ const preResult = async() => {
         count ++;
     }
     console.log("concluded accounts preparation");    
-    console.log("preparang to spam transactions");    
+    console.log("preparing to spam transactions");    
 
     var objTimeout = setTimeout(async () => {            
         waitToExecuteTransactions();
@@ -77,18 +90,20 @@ const preResult = async() => {
 }
 
 const waitToExecuteTransactions = async () =>{
-    var countTransactions = 0;
+    var countTransactions = 1;
     var countAccounts = 0;    
     console.log("accounts: ".concat(listCredentials.length));    
     while (listCredentials.length > 0){   
         transactionFee = 0.01;   
         var actualCredential = listCredentials.pop();
         console.log(actualCredential);
-        console.log("executed accounts:".concat(countAccounts));
+        console.log("executed accounts:".concat(countAccounts));        
         
-        while (countTransactions < 49){
+        while (countTransactions <= 2){
             try{
-            await postResult(actualCredential, transactionFee);
+
+                const nonce = await getAccountNonce(cryptography.getAddressFromBase32Address(actualCredential.address)) + countTransactions; 
+            await postResult(actualCredential, transactionFee, nonce);
             countTransactions++;
             transactionFee = transactionFee + 0.01;
             transactionFee = parseFloat(transactionFee.toPrecision(2));
@@ -104,10 +119,10 @@ const waitToExecuteTransactions = async () =>{
     }
 }
 
-const postResult = async(credential, transactionFee) => {    
+const postResult = async(credential, transactionFee, nonce) => {    
     const client = await api.getClient();            
 
-    const newTx = await createTransaction(credential, transactionFee);
+    const newTx = await createTransaction(credential, transactionFee, nonce);
     const response = await client.transaction.send(newTx); 
     console.log(response);
 }
