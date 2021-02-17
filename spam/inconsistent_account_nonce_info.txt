@@ -1,0 +1,107 @@
+lisk@ip-172-31-3-164:~/icbct21/spam$ node spam_attack_different_transaction.js
+<Buffer d0 46 99 e5 7c 4a 38 46 c9 88 f3 c1 53 06 79 6f 8e ae 5c 1c>
+account nonce:71
+transaction nonce:71
+{
+  address: 'lsko5cudcwy5xfu25j78667exc3jd3j9s8cr7vv9q',
+  binaryAddress: '62c70d0ef1587d0c2f8e7a94eb0468e691c6ede3',
+  passphrase: 'search width aware print casino grocery laptop hover wire good master parent',
+  publicKey: '041732ab34a95908702f65ab000503ad70219ebf1421593b70b3cbe284821ae0',
+  privateKey: 'ad19e9a7f2fa9e5ec80eeec0893360529f78667d7f14f70564a02d784654ea7e041732ab34a95908702f65ab000503ad70219ebf1421593b70b3cbe284821ae0'
+}
+{
+  transactionId: '198fe7bfbcffefd65c565a13173b1e64868eb90dc8122df24852e633dfa21a08'
+}
+0.02
+<Buffer d0 46 99 e5 7c 4a 38 46 c9 88 f3 c1 53 06 79 6f 8e ae 5c 1c>
+account nonce:71
+transaction nonce:72
+{
+  address: 'lsk9mark4q88s3qgj6ydkwnbfbwyxse65uwz7fqox',
+  binaryAddress: '69732a26af7ed15ff151d52e7378d78877652e17',
+  passphrase: 'inquiry flat evoke cannon popular song economy include unaware lift mansion giant',
+  publicKey: 'b756df70ad1adf6262ca2d7a77f8fc6f195c6c15faa922b275b5aa033526be67',
+  privateKey: '00122214d4382d2a4df831ca85cc1df8ee0c4c0351faf3b2aae2fb99d2ebe838b756df70ad1adf6262ca2d7a77f8fc6f195c6c15faa922b275b5aa033526be67'
+}
+(node:1140368) UnhandledPromiseRejectionWarning: Error: Incoming transaction fee is not sufficient to replace existing transaction
+    at Object.exports.convertRPCError (/home/lisk/icbct21/spam/node_modules/@liskhq/lisk-api-client/dist-node/utils.js:3:38)
+    at WSChannel._handleMessage (/home/lisk/icbct21/spam/node_modules/@liskhq/lisk-api-client/dist-node/ws_channel.js:134:62)
+    at WebSocket.onMessage (/home/lisk/icbct21/spam/node_modules/ws/lib/event-target.js:132:16)
+    at WebSocket.emit (events.js:314:20)
+    at Receiver.receiverOnMessage (/home/lisk/icbct21/spam/node_modules/ws/lib/websocket.js:825:20)
+    at Receiver.emit (events.js:314:20)
+    at Receiver.dataMessage (/home/lisk/icbct21/spam/node_modules/ws/lib/receiver.js:437:14)
+    at Receiver.getData (/home/lisk/icbct21/spam/node_modules/ws/lib/receiver.js:367:17)
+    at Receiver.startLoop (/home/lisk/icbct21/spam/node_modules/ws/lib/receiver.js:143:22)
+    at Receiver._write (/home/lisk/icbct21/spam/node_modules/ws/lib/receiver.js:78:10)
+(node:1140368) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:1140368) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+^C
+lisk@ip-172-31-3-164:~/icbct21/spam$ node spam_attack_different_transaction.js
+<Buffer d0 46 99 e5 7c 4a 38 46 c9 88 f3 c1 53 06 79 6f 8e ae 5c 1c>
+account nonce:74
+transaction nonce:74
+{
+  address: 'lsk5sg2o3h4kdmhrkqts8k5ps27eag9cawy62xuwa',
+  binaryAddress: '5eff8623a9a68bd952b3dbe8b26f0eb67ed1e6f1',
+  passphrase: 'collect royal horse tide shop coyote position scrub share large job blossom',
+  publicKey: '57f2bbef92d75b4d260e519c86f31255e1d3a254eac0ece9fa7886409d12d404',
+  privateKey: '4f59286850f5cfd1d33c7bf456cf822e8555cc5b772bbcb857643ebadf50557957f2bbef92d75b4d260e519c86f31255e1d3a254eac0ece9fa7886409d12d404'
+}
+{
+  transactionId: '075d6e8d23061fb5f14c763635e91bf868cd26b4f0d551bd31a879c79d1d9e50'
+}
+0.02
+<Buffer d0 46 99 e5 7c 4a 38 46 c9 88 f3 c1 53 06 79 6f 8e ae 5c 1c>
+account nonce:74
+transaction nonce:75
+{
+  address: 'lsknwj4byo4xgtuo2trnrb8668u7wzwk4e5gm4zh7',
+  binaryAddress: '3df89345890fe70662723c8cf529f075c17a26cb',
+  passphrase: 'define impulse cushion sea kick season already hip brick position sunset knee',
+  publicKey: '2c53f8afb5242bb52beb8031845e84f05816760f46479f845646fed300a7290a',
+  privateKey: '12dd82bc61dbc7db3a27a519a4ff1bbad92957ffe26d0ea830a479dda3b2d83b2c53f8afb5242bb52beb8031845e84f05816760f46479f845646fed300a7290a'
+}
+{
+  transactionId: '8eeb8ec1cf364ed07a2fbf8e4436d89a1c4050ba4c4d19e45ce3372c0fbe052c'
+}
+0.03
+concluded accounts preparation
+preparing to spam transactions
+accounts: 2
+{
+  address: 'lsknwj4byo4xgtuo2trnrb8668u7wzwk4e5gm4zh7',
+  binaryAddress: '3df89345890fe70662723c8cf529f075c17a26cb',
+  passphrase: 'define impulse cushion sea kick season already hip brick position sunset knee',
+  publicKey: '2c53f8afb5242bb52beb8031845e84f05816760f46479f845646fed300a7290a',
+  privateKey: '12dd82bc61dbc7db3a27a519a4ff1bbad92957ffe26d0ea830a479dda3b2d83b2c53f8afb5242bb52beb8031845e84f05816760f46479f845646fed300a7290a'
+}
+executed accounts:0
+<Buffer 3d f8 93 45 89 0f e7 06 62 72 3c 8c f5 29 f0 75 c1 7a 26 cb>
+{
+  transactionId: '4f00fd38cc30338e5af1841b2fc5e151983bd3adbaeca8719dd1afaa9f941eea'
+}
+0.02
+<Buffer 3d f8 93 45 89 0f e7 06 62 72 3c 8c f5 29 f0 75 c1 7a 26 cb>
+{
+  transactionId: 'de544b60594a2cb3b1a3187e929c6d37e3ad17d1e3c9a6db58c65f38a58d264c'
+}
+0.03
+{
+  address: 'lsk5sg2o3h4kdmhrkqts8k5ps27eag9cawy62xuwa',
+  binaryAddress: '5eff8623a9a68bd952b3dbe8b26f0eb67ed1e6f1',
+  passphrase: 'collect royal horse tide shop coyote position scrub share large job blossom',
+  publicKey: '57f2bbef92d75b4d260e519c86f31255e1d3a254eac0ece9fa7886409d12d404',
+  privateKey: '4f59286850f5cfd1d33c7bf456cf822e8555cc5b772bbcb857643ebadf50557957f2bbef92d75b4d260e519c86f31255e1d3a254eac0ece9fa7886409d12d404'
+}
+executed accounts:1
+<Buffer 5e ff 86 23 a9 a6 8b d9 52 b3 db e8 b2 6f 0e b6 7e d1 e6 f1>
+{
+  transactionId: '56b4da8c1a5b98286c03c36f1b0caa1de189cabb20f0a0407ae45240a780cc13'
+}
+0.02
+<Buffer 5e ff 86 23 a9 a6 8b d9 52 b3 db e8 b2 6f 0e b6 7e d1 e6 f1>
+{
+  transactionId: '8cae00477eef38a9397686d22dcbe0add46ae22f34139f9f51cc085fb07ded3e'
+}
+0.03

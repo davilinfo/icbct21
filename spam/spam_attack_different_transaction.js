@@ -1,5 +1,4 @@
 const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = 'ws://localhost:5011/ws';
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
 const { exception } = require('console');
@@ -64,20 +63,21 @@ const createTransaction = async (credential, transactionFee, nonce) => {
 }
 
 var listCredentials = [];
-var count = 1;
+var count = 2;
 
 const preResult = async() => {            
-    while (count <= 2) {        
+    while (count > 0) {        
         const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
-        console.log('account nonce:'.concat(accountNonce));
+        console.log('account nonce:'.concat(accountNonce));        
+        count--;
         const nonce = parseInt(accountNonce) + count;
-        console.log(nonce);
+        console.log('transaction nonce:'.concat(nonce));
         var credential = await createAccount(nonce);
         listCredentials.push(credential);
         accountFee = accountFee + 0.01;
         accountFee = parseFloat(accountFee.toPrecision(2));
-        console.log(accountFee);
-        count ++;
+        console.log(accountFee);        
+        
     }
     console.log("concluded accounts preparation");    
     console.log("preparing to spam transactions");    
@@ -90,7 +90,7 @@ const preResult = async() => {
 }
 
 const waitToExecuteTransactions = async () =>{
-    var countTransactions = 1;
+    var countTransactions = 0;
     var countAccounts = 0;    
     console.log("accounts: ".concat(listCredentials.length));    
     while (listCredentials.length > 0){   
@@ -99,7 +99,7 @@ const waitToExecuteTransactions = async () =>{
         console.log(actualCredential);
         console.log("executed accounts:".concat(countAccounts));        
         
-        while (countTransactions <= 2){
+        while (countTransactions < 2){
             try{
 
                 const nonce = await getAccountNonce(cryptography.getAddressFromBase32Address(actualCredential.address)) + countTransactions; 
