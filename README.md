@@ -37,5 +37,3 @@ pm2 start --name restaurant_sidechain index.js
 pm2 logs 0
 
 /*pm2 --help for other commands*/
-
-Now move to the backend folder to configure the backend. Open the Readme there
