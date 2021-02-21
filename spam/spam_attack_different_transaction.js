@@ -33,7 +33,7 @@ const createAccount = async (nonce) => {
         fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
         nonce: BigInt(nonce),
         asset: {
-            amount: BigInt(200000000),
+            amount: BigInt(300000000),
             recipientAddress: address,
             data: 'ok',
         },
@@ -63,7 +63,7 @@ const createTransaction = async (credential, transactionFee, nonce) => {
 }
 
 var listCredentials = [];
-var count = 50;
+var count = 64;
 
 const preResult = async() => {
     while (count > 0) {
@@ -84,7 +84,7 @@ const preResult = async() => {
 
     var objTimeout = setTimeout(async () => {
         waitToExecuteTransactions();
-        }, 150000);
+        }, 30000);
 
     objTimeout.ref();
 }
@@ -99,7 +99,7 @@ const waitToExecuteTransactions = async () =>{
         console.log(actualCredential);
         console.log("executed accounts:".concat(countAccounts));
 
-        while (countTransactions < 50){
+        while (countTransactions < 64){
             try{
 
                 const nonce = await getAccountNonce(cryptography.getAddressFromBase32Address(actualCredential.address)) + countTransactions;
