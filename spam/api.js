@@ -26,9 +26,10 @@ class Api{
 
     async getTransactionByid(transactionId){
         const client = await this.getClient();
+        const schema = await client.invoke('app:getSchema');
         const transaction = await client.invoke('app:getTransactionByID', {id: transactionId});
 
-        return transaction;
+        return codec.decodeJSON(schema.transaction, Buffer.from(transaction, 'hex'));
     }
 
     async getAccountNonce (address) {
@@ -36,6 +37,16 @@ class Api{
         const sequence = account.sequence;
         return Number(sequence.nonce);
     };
+
+    async getNodeInfo(){
+        const client = await this.getClient();
+        const schema = await client.invoke('app:getSchema');
+        console.log(schema);
+
+        const nodeInfo = await client.invoke('app:getNodeInfo', {});
+
+        return nodeInfo;
+    }
 
     async useClient () {
         const client = await this.getClient();
