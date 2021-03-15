@@ -130,9 +130,7 @@ const createTransaction = async () => {
 }
 
 const postResult = async() => {    
-    const newTx = await createTransaction();           
-        
-    console.log('transaction: '.concat(codec.decodeJSON(schema, Buffer.from(newTx, 'hex'))));
+    const newTx = await createTransaction();                   
                 
     setInterval(async function(){
         const client = await api.getClient();
