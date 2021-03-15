@@ -1,4 +1,5 @@
 const { cryptography, transactions } = require('@liskhq/lisk-client');
+const { codec } = require ('lisk-sdk');
 const RPC_ENDPOINT = 'ws://localhost:5011/ws';
 const Api = require('./api.js');
 const { exception } = require('console');
@@ -62,6 +63,10 @@ const schema = {
         clientNonce: {
             dataType: 'string',
             fieldNumber: 10
+        },
+        recipientAddress: {
+            dataType: "bytes",
+            fieldNumber: 11
         }
     }
 };
@@ -126,8 +131,8 @@ const createTransaction = async () => {
 
 const postResult = async() => {    
     const newTx = await createTransaction();           
-    
-    console.log('transaction: '.concat(newTx));
+        
+    console.log('transaction: '.concat(codec.decodeJSON(schema, Buffer.from(newTx, 'hex'))));
                 
     setInterval(async function(){
         const client = await api.getClient();

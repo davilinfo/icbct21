@@ -10,13 +10,23 @@ const accounts = {
 
 const api = new Api();
 
+const getAccountNonce = async(address) => {
+    console.log(address);
+
+    const nonce = await api.getAccountNonce(address);
+        return Number(nonce);
+}
+
 const createTransaction = async () => {
+    const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
+    const nonce = parseInt(accountNonce) + 1;
     const client = await api.getClient();    
     const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
     const tx = await client.transaction.create({ 
         moduleID: 2,
         assetID: 0,
         fee: BigInt(transactions.convertLSKToBeddows('0.01')),
+        nonce: BigInt(nonce),
         asset: {
             amount: BigInt(5000000),
             recipientAddress: address,

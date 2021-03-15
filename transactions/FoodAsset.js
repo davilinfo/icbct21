@@ -55,6 +55,10 @@ class FoodAsset extends BaseAsset {
             clientNonce: {
                 dataType: 'string',
                 fieldNumber: 10
+            },
+            recipientAddress: {
+                dataType: "bytes",
+                fieldNumber: 11
             }
         }
     } 

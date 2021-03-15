@@ -39,7 +39,7 @@ class MenuAsset extends BaseAsset {
     }
 
     static get FEE () {
-		return `100000000`;
+		return BigInt('100000000');
     };        
 
     validate({asset}){
@@ -108,15 +108,11 @@ class MenuAsset extends BaseAsset {
 
         const restaurantAddress = transaction.senderAddress;
         const restaurantAccount = stateStore.account.get(transaction.senderAddress);        
-
-        const updatedRestaurant = {
-            ...restaurantAccount,
-            balance: restaurantAccountBalanceDeducted.toString()
-        }
+        
         stateStore.account.set(restaurantAddress, restaurantAccount);
         reducerHandler.invoke("token:debit", {
             address: restaurantAddress,
-            amount: MenuAsset.FEE()
+            amount: MenuAsset.FEE
         });
 
         const sidechainAddress = this.sidechainAddress();
@@ -125,7 +121,7 @@ class MenuAsset extends BaseAsset {
         stateStore.account.set(sidechainAddress, sidechainOwnerAccount);
         reducerHandler.invoke("token:credit", {
             address: sidechainAddress,
-            amount: MenuAsset.FEE()
+            amount: MenuAsset.FEE
         });        
     }    
 }
