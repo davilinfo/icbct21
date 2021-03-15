@@ -32,11 +32,11 @@ const schema = {
             fieldNumber: 2
         },
         foodType: {
-            dataType: 'number',
+            dataType: 'uint32',
             fieldNumber: 3
         },
         price:{
-            dataType: 'number',
+            dataType: 'uint64',
             fieldNumber: 4
         },
         deliveryAddress: {
@@ -104,12 +104,12 @@ const createTransaction = async () => {
             nonce: BigInt(accountNonce),
             fee: BigInt(transactions.convertLSKToBeddows('0.01')),
             senderPublicKey: senderPublicKey,
-            asset: {
-                price: BigInt(transactions.convertLSKToBeddows('50')),
+            asset: {                
                 name: 'Ribs on the barbie',
                 description: 'delicious 10 ribs of the barbie',
-                deliveryAddress: 'address',
                 foodType: 4,
+                price: BigInt(transactions.convertLSKToBeddows('50')),
+                deliveryAddress: 'address',                
                 phone: '71997035287',
                 username: 'davi',
                 observation: 'none',

@@ -3,6 +3,8 @@ const {
     codec,    
 } = require('lisk-sdk');
 
+const { cryptography } = require('@liskhq/lisk-client');
+
 const FoodAssetId = 1040;
 
 class FoodAsset extends BaseAsset {
@@ -23,11 +25,11 @@ class FoodAsset extends BaseAsset {
                 fieldNumber: 2
             },
             foodType: {
-                dataType: 'number',
+                dataType: 'uint32',
                 fieldNumber: 3
             },
             price:{
-                dataType: 'number',
+                dataType: 'uint64',
                 fieldNumber: 4
             },
             deliveryAddress: {
@@ -58,11 +60,12 @@ class FoodAsset extends BaseAsset {
     } 
 
     get sidechainAddress () {
-        return "6181773985994883123L";
+        const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
+        return address;
     }
 
     get sidechainFee () {
-        return '50000000';
+        return BigInt('50000000');
     }
 
     static get TYPE() {
@@ -128,12 +131,7 @@ class FoodAsset extends BaseAsset {
         if (!senderAccount){           
             throw new Error(
                     'Invalid "sender", please verify your passphrase: Verify your passpahrase and address');            
-        }
-
-        if (senderBalanceDeducted < 0){
-            throw new Error(
-                    'Not enough "balance" for the transaction: Need a balance at least equal than food price');
-        }
+        }        
 
         await stateStore.account.set(senderAddress, senderAccount);
 
@@ -144,7 +142,7 @@ class FoodAsset extends BaseAsset {
 
         const restaurantAddress = transaction.recipientAddress;
         const restaurantAccount = stateStore.account.get(transaction.recipientAddress);
-        const restaurantPaymentSubSidechainFee = asset.price - this.sidechainFee();
+        const restaurantPaymentSubSidechainFee = asset.price - this.sidechainFee;
 
         await reducerHandler.invoke("token:credit", {
             address: restaurantAddress,
@@ -153,13 +151,13 @@ class FoodAsset extends BaseAsset {
 
         await stateStore.account.set(restaurantAddress, restaurantAccount);
 
-        const sidechainAccount = stateStore.account.get(this.sidechainAddress());
+        const sidechainAccount = stateStore.account.get(this.sidechainAddress);        
         await reducerHandler.invoke("token:credit", {
-            address: this.sidechainAddress(),
-            amount: this.sidechainFee(),
+            address: this.sidechainAddress,
+            amount: this.sidechainFee,
         });
         
-        await stateStore.account.set(this.sidechainAddress(), sidechainAccount);
+        await stateStore.account.set(this.sidechainAddress, sidechainAccount);
                                 
     }
     
