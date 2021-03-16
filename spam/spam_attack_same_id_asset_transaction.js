@@ -72,7 +72,7 @@ const schema = {
 };
 
 const createTransaction = async () => {                   
-    const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
+    const address = cryptography.getAddressFromBase32Address('lskg6dncy3xgndwudbdm6c8g5fedtho3xgkcann7w');
     const senderPublicKey = cryptography.getAddressAndPublicKeyFromPassphrase(accounts.genesis.passphrase).publicKey;
 
     const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
