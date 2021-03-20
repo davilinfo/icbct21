@@ -1,8 +1,12 @@
 const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
 const RPC_ENDPOINT = 'ws://localhost:5011/ws';
 const Api = require('./api.js');
+const Account = require('../accounts/CreateAccount');
 const { exception } = require('console');
-const accounts = { 
+const { stringify } = require('querystring');
+const { parse, format } = require('path');
+const { StringDecoder } = require('string_decoder');
+const accounts = {
     "genesis": {
       "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
     }
@@ -25,6 +29,30 @@ var accountFee = 0.01;
 
 const api = new Api();
 
+const createAccount = async (nonce) => {
+    const account = new Account();
+    var newCredential = await account.newCredentials();
+    console.log(newCredential);
+    const client = await api.getClient();
+    const address = cryptography.getAddressFromBase32Address(newCredential.address);
+
+    var tx = await client.transaction.create({
+        moduleID: 2,
+        assetID: 0,
+        fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
+        nonce: BigInt(nonce),
+        asset: {
+            amount: BigInt(100000000),
+            recipientAddress: address,
+            data: 'ok',
+        },
+    }, accounts.genesis.passphrase);
+
+    console.log(await client.transaction.send(tx));
+
+    return newCredential;
+}
+
 const getAccountNonce = async(address) => {
     console.log(address);
 
@@ -32,11 +60,10 @@ const getAccountNonce = async(address) => {
         return Number(nonce);
 }
 
-const createTransaction = async () => {
-    const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
-    const nonce = parseInt(accountNonce);
+const createTransaction = async (address) => {    
+    const nonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
     const client = await api.getClient();    
-    const address = cryptography.getAddressFromBase32Address('lskg6dncy3xgndwudbdm6c8g5fedtho3xgkcann7w');
+
     var tx = await client.transaction.create({
         moduleID: 2,
         assetID: 0,
@@ -52,14 +79,39 @@ const createTransaction = async () => {
     return tx;
 }
 
-const postResult = async() => {    
-    const newTx = await createTransaction();            
+const getTransaction = async(transactionId) => {
+
+    const transaction = await api.getTransactionByid(transactionId);
+    console.log(transaction);
+}
+
+const postResult = async() => {
+    const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
+    var credential = await createAccount(accountNonce);
+    const address = cryptography.getAddressFromBase32Address(credential.address);
+    var objTimeout = setTimeout(async () => {
+        const newTx = await createTransaction(address);  
+        var response;
+        var interval = setInterval(async function(){
+            const client = await api.getClient();
+
+            try{
+                response = await client.transaction.send(newTx);
+                console.log(response);
+            }catch (message){
+                console.log('Error: The current transaction nonce is lower than account nonce! This way is not possible to perform such spam attack!');
+                                
+                await getTransaction(response.transactionId.toString());                
                 
-    setInterval(async function(){
-        const client = await api.getClient();
-        const response = await client.transaction.send(newTx); 
-        console.log(response);
-    }, 500);            
+            }            
+
+        }, 500);
+
+        }, 20000);
+
+    objTimeout.ref();      
+
+    
 }
 
 

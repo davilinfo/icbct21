@@ -30,7 +30,7 @@ const preResult = async() => {
 
     //await getnodeInfo();
 
-    const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
+    const address = cryptography.getAddressFromBase32Address('lskg6dncy3xgndwudbdm6c8g5fedtho3xgkcann7w');
     await getAccount(address);
 }
 

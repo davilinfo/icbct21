@@ -1,6 +1,7 @@
 const { createWSClient } = require('@liskhq/lisk-api-client');
 const { codec } = require ('lisk-sdk');
 const RPC_ENDPOINT = 'ws://localhost:5011/ws';
+const FoodAsset = require('../transactions/FoodAsset');
 
 class Api{
 
@@ -30,6 +31,14 @@ class Api{
         const transaction = await client.invoke('app:getTransactionByID', {id: transactionId});
 
         return codec.decodeJSON(schema.transaction, Buffer.from(transaction, 'hex'));
+    }
+    
+    async getFoodAssetTransactionByid(transactionId){
+        var schema = new FoodAsset().schema;
+        const client = await this.getClient();        
+        const transaction = await client.invoke('app:getTransactionByID', {id: transactionId});
+
+        return codec.decodeJSON(schema, Buffer.from(transaction, 'hex'));
     }
 
     async getAccountNonce (address) {
