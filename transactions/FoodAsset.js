@@ -63,8 +63,20 @@ class FoodAsset extends BaseAsset {
         }
     } 
 
+    /*
+    
+{
+  address: 'lsk3z33t62zbfsaq9mwa2bwfd2befeymrrhsdbhdc',
+  binaryAddress: '401089ab0037b79ab4b7ce0d7f6b06b7ad12ca5d',
+  passphrase: 'model dilemma peace excess buffalo weasel decide cradle setup tiger cabin disorder',
+  publicKey: 'a862a83dbb2c07efb723fa2a96fe73917d90e0e85823e8801487bd3bca9b17f9',
+  privateKey: '5f63a3ad49c3bd06fc8a0cc6c18e0a2255cf4dea8d338c2f372917bf47194cd7a862a83dbb2c07efb723fa2a96fe73917d90e0e85823e8801487bd3bca9b17f9'
+}
+    
+    */
+
     get sidechainAddress () {
-        const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
+        const address = cryptography.getAddressFromBase32Address('lsk3z33t62zbfsaq9mwa2bwfd2befeymrrhsdbhdc');
         return address;
     }
 
