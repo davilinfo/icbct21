@@ -1,11 +1,6 @@
-const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
-const RPC_ENDPOINT = 'ws://localhost:5011/ws';
+const { cryptography, transactions } = require('@liskhq/lisk-client');
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
-const { exception } = require('console');
-const { stringify } = require('querystring');
-const { parse, format } = require('path');
-const { StringDecoder } = require('string_decoder');
 const accounts = {
     "genesis": {
       "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"

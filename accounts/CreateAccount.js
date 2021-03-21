@@ -1,5 +1,4 @@
-const { passphrase } =  require('@liskhq/lisk-client');
-const { cryptography } =  require('@liskhq/lisk-client');
+const { cryptography, passphrase } =  require('@liskhq/lisk-client');
 
 class Account{
 

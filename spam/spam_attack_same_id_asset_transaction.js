@@ -1,10 +1,6 @@
 const { cryptography, transactions } = require('@liskhq/lisk-client');
-const { codec } = require ('lisk-sdk');
-const RPC_ENDPOINT = 'ws://localhost:5011/ws';
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
-const { exception } = require('console');
-const { exit } = require('process');
 const accounts = {
     "genesis": {
       "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
@@ -167,10 +163,10 @@ const postResult = async() => {
     const address = cryptography.getAddressFromBase32Address(credential.address);
     var objTimeout = setTimeout(async () => {
         const newTx = await createTransaction(address);
-
+        var response;
         setInterval(async function(){
             const client = await api.getClient();
-            var response;
+            
             try{
                 response = await client.transaction.send(newTx);
                 console.log(response);
