@@ -10,6 +10,25 @@ const accounts = {
 const api = new Api();
 var accountFee = 0.01;
 
+const initializeSidechainOwnerAccount = async(nonce) => {
+    const client = await api.getClient();
+    const address = cryptography.getAddressFromBase32Address('lsk3z33t62zbfsaq9mwa2bwfd2befeymrrhsdbhdc');
+
+    var tx = await client.transaction.create({
+        moduleID: 2,
+        assetID: 0,
+        fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
+        nonce: BigInt(nonce),
+        asset: {
+            amount: BigInt(100000000),
+            recipientAddress: address,
+            data: 'ok',
+        },
+    }, accounts.genesis.passphrase);
+
+    console.log(await client.transaction.send(tx));
+}
+
 const createAccount = async (nonce) => {
     const account = new Account();
     var newCredential = await account.newCredentials();
@@ -100,7 +119,7 @@ const createTransaction = async (address) => {
     const senderPublicKey = cryptography.getAddressAndPublicKeyFromPassphrase(accounts.genesis.passphrase).publicKey;    
 
     var name= 'Ribs on the barbie';
-    var description = 'delicious 10 ribs of the barbie';
+    var description = 'delicious 10 ribs on the barbie';
     var deliveryAddress = 'address';
     var foodType = 4;
     var phone = '71997035287';
@@ -132,14 +151,14 @@ const createTransaction = async (address) => {
             fee: BigInt(transactions.convertLSKToBeddows('0.01')),
             senderPublicKey: senderPublicKey,
             asset: {
-                name: 'Ribs on the barbie',
-                description: 'delicious 10 ribs of the barbie',
-                foodType: 4,
+                name: name,
+                description: description,
+                foodType: foodType,
                 price: BigInt(transactions.convertLSKToBeddows('50')),
-                deliveryAddress: 'address',
-                phone: '71997035287',
-                username: 'davi',
-                observation: 'none',
+                deliveryAddress: deliveryAddress,
+                phone: phone,
+                username: username,
+                observation: observation,
                 clientData: clientData.encryptedMessage,
                 clientNonce: clientData.nonce,
                 recipientAddress: address
@@ -158,8 +177,16 @@ const getTransaction = async(transactionId) => {
 }
 
 const postResult = async() => {
+    
+    var ref = setInterval(async function(){        
+        clearInterval(ref);
+        const nonceAccount = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
+        await initializeSidechainOwnerAccount(nonceAccount);
+    }, 10000);
+
     const nonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
-    var credential = await createAccount(nonce);
+    var credential = await createAccount(nonce);    
+
     const address = cryptography.getAddressFromBase32Address(credential.address);
     var objTimeout = setTimeout(async () => {
         const newTx = await createTransaction(address);

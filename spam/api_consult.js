@@ -32,6 +32,9 @@ const preResult = async() => {
 
     const address = cryptography.getAddressFromBase32Address('lskg6dncy3xgndwudbdm6c8g5fedtho3xgkcann7w');
     await getAccount(address);
+
+    const addressSidechain = cryptography.getAddressFromBase32Address('lsk3z33t62zbfsaq9mwa2bwfd2befeymrrhsdbhdc');
+    await getAccount(addressSidechain);
 }
 
 preResult();
