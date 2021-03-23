@@ -44,19 +44,19 @@ class RefundAsset extends BaseAsset {
 
     async apply({asset, stateStore, reducerHandler, transaction}){           
         const restaurantAddress = transaction.senderAddress;
-        const restaurantAccount = store.account.get(transaction.senderAddress);                
+        const restaurantAccount = await store.account.get(transaction.senderAddress);                
 
-        stateStore.account.set(restaurantAddress, restaurantAccount);
+        await stateStore.account.set(restaurantAddress, restaurantAccount);
 
         await reducerHandler.invoke("token:debit", {
             address: restaurantAddress,
             amount: asset.amount,
           });         
 
-        const clientAddress = transaction.recipientAddress;
-        const clientAccount = stateStore.account.get(transaction.recipientAddress);        
+        const clientAddress = asset.recipientAddress;
+        const clientAccount = await stateStore.account.get(clientAddress);        
         
-        stateStore.account.set(clientAddress, clientAccount);
+        await stateStore.account.set(clientAddress, clientAccount);
         
         await reducerHandler.invoke("token:credit", {
             address: clientAddress,
