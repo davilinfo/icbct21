@@ -18,7 +18,7 @@ class RefundAsset extends BaseAsset {
                 fieldNumber: 1
             },
             "amount": {
-                dataType: "number",
+                dataType: "uint32",
                 fieldNumber: 2
             }
         }
