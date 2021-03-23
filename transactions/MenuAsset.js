@@ -113,7 +113,7 @@ class MenuAsset extends BaseAsset {
         const restaurantAccount = await stateStore.account.get(transaction.senderAddress);        
         
         await stateStore.account.set(restaurantAddress, restaurantAccount);
-        reducerHandler.invoke("token:debit", {
+        await reducerHandler.invoke("token:debit", {
             address: restaurantAddress,
             amount: MenuAsset.FEE
         });
@@ -122,7 +122,7 @@ class MenuAsset extends BaseAsset {
         const sidechainOwnerAccount = await stateStore.account.get(sidechainAddress);                
         
         await stateStore.account.set(sidechainAddress, sidechainOwnerAccount);
-        reducerHandler.invoke("token:credit", {
+        await reducerHandler.invoke("token:credit", {
             address: sidechainAddress,
             amount: MenuAsset.FEE
         });        
