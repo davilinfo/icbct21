@@ -3,6 +3,8 @@ const {
     codec,    
 } = require('lisk-sdk');
 
+const { cryptography } = require('@liskhq/lisk-client');
+
 const MenuAssetId = 1060;
 
 class MenuAsset extends BaseAsset {
@@ -21,7 +23,8 @@ class MenuAsset extends BaseAsset {
     }
 
     get sidechainAddress () {
-        return "e719a29927ae200a5926a0de1d40131c2069644a";
+        const address = cryptography.getAddressFromBase32Address('lsk3z33t62zbfsaq9mwa2bwfd2befeymrrhsdbhdc');
+        return address;
     }
 
     /*
@@ -107,18 +110,18 @@ class MenuAsset extends BaseAsset {
         }
 
         const restaurantAddress = transaction.senderAddress;
-        const restaurantAccount = stateStore.account.get(transaction.senderAddress);        
+        const restaurantAccount = await stateStore.account.get(transaction.senderAddress);        
         
-        stateStore.account.set(restaurantAddress, restaurantAccount);
+        await stateStore.account.set(restaurantAddress, restaurantAccount);
         reducerHandler.invoke("token:debit", {
             address: restaurantAddress,
             amount: MenuAsset.FEE
         });
 
         const sidechainAddress = this.sidechainAddress();
-        const sidechainOwnerAccount = stateStore.account.get(sidechainAddress);                
+        const sidechainOwnerAccount = await stateStore.account.get(sidechainAddress);                
         
-        stateStore.account.set(sidechainAddress, sidechainOwnerAccount);
+        await stateStore.account.set(sidechainAddress, sidechainOwnerAccount);
         reducerHandler.invoke("token:credit", {
             address: sidechainAddress,
             amount: MenuAsset.FEE
