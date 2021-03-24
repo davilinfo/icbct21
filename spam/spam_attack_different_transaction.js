@@ -46,7 +46,7 @@ const createAccount = async (nonce) => {
 
 const createTransaction = async (credential, transactionFee, nonce) => {
     const client = await api.getClient();
-    const address = cryptography.getAddressFromBase32Address('lsk539sfkahe9gdptcn3agn6bjmfw7ozo6dcnpnax');
+    const address = cryptography.getAddressFromPassphrase(accounts.genesis.passphrase);
     const tx = await client.transaction.create({
         moduleID: 2,
         assetID: 0,
