@@ -38,6 +38,14 @@ class Api{
         return client.transaction.get(Buffer.from(transactionId, 'hex'));
     }
 
+    async getBlockByHeight(height){
+        const client = await this.getClient();
+        const schema = await client.invoke('app:getSchema');
+        const block = await client.invoke('app:getBlockByHeight', {height: height});
+        
+        return codec.decodeJSON(schema.block, Buffer.from(block, 'hex'));
+    }
+
     async getAccountNonce (address) {
         const account = await this.getAccount(address);
         const sequence = account.sequence;

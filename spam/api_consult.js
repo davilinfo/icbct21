@@ -25,10 +25,17 @@ const getAccount = async(address) => {
     console.log(account); 
 }
 
+const getBlock = async(height) => {
+    const block = await api.getBlockByHeight(height);
+    console.log(block);
+}
+
 const preResult = async() => {    
     //await getTransaction('8cae00477eef38a9397686d22dcbe0add46ae22f34139f9f51cc085fb07ded3e');
 
     //await getnodeInfo();
+
+    await getBlock(109090);
 
     const address = cryptography.getAddressFromBase32Address('lskg6dncy3xgndwudbdm6c8g5fedtho3xgkcann7w');
     await getAccount(address);
