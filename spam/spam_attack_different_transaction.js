@@ -1,4 +1,4 @@
-const { apiClient, cryptography, transactions } = require('@liskhq/lisk-client');
+const { cryptography, transactions } = require('@liskhq/lisk-client');
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
 const { exception } = require('console');
@@ -93,7 +93,7 @@ const waitToExecuteTransactions = async () =>{
     var countTransactions = 0;
     var countAccounts = 0;
     console.log("accounts: ".concat(listCredentials.length));
-    while (listCredentials.length > 0){
+    while (listCredentials.length-1 > 0){
         transactionFee = 0.01;
         var actualCredential = listCredentials.pop();
         console.log(actualCredential);
