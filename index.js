@@ -22,7 +22,10 @@ genesisBlockDevnet.header.asset.accounts = genesisBlockDevnet.header.asset.accou
 // and communityIdentifier to mitigate transaction replay
 const appConfig = utils.objects.mergeDeep({}, configDevnet, {
 	label: 'restaurants-app',
-	genesisConfig: { communityIdentifier: 'Restaurant' }, //In order to have a unique networkIdentifier
+	genesisConfig: { 
+		communityIdentifier: 'Restaurant',
+		maxPayloadLength: 30000
+	}, //In order to have a unique networkIdentifier
 	logger: {
 		consoleLogLevel: 'info',
 	},

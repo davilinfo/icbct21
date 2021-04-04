@@ -13,8 +13,7 @@ class FoodAsset extends BaseAsset {
     schema = {
         $id: 'lisk/food/transaction',
         type: 'object',
-        required: ["name", "description", "foodType", "price", "deliveryAddress", "phone", 
-            "username", "observation", "clientData", "clientNonce"],
+        required: ["name", "description", "foodType", "price", "observation", "restaurantData", "restaurantNonce", "clientData", "clientNonce"],
         properties: {
             name: {
                 dataType: 'string',
@@ -31,34 +30,30 @@ class FoodAsset extends BaseAsset {
             price:{
                 dataType: 'uint64',
                 fieldNumber: 4
-            },
-            deliveryAddress: {
+            },            
+            observation: {
                 dataType: 'string',
                 fieldNumber: 5
             },
-            phone: {
+            restaurantData: {
                 dataType: 'string',
                 fieldNumber: 6
             },
-            username: {
+            restaurantNonce: {
                 dataType: 'string',
                 fieldNumber: 7
             },
-            observation: {
+            clientData: {
                 dataType: 'string',
                 fieldNumber: 8
             },
-            clientData: {
+            clientNonce: {
                 dataType: 'string',
                 fieldNumber: 9
             },
-            clientNonce: {
-                dataType: 'string',
-                fieldNumber: 10
-            },
             recipientAddress: {
                 dataType: "bytes",
-                fieldNumber: 11
+                fieldNumber: 10
             }
         }
     } 
@@ -104,26 +99,21 @@ class FoodAsset extends BaseAsset {
         if (!asset.foodType || asset.foodType <= 0){
             throw new Error(
                     'Invalid "asset.foodType" defined on transaction: A value bigger than 0');
-        }
-
-        if (!asset.deliveryAddress){
-            throw new Error(
-                    'Invalid "asset.deliveryAddress" defined on transaction: A string value bigger than 0');
-        }
-
-        if (!asset.phone){
-            throw new Error(
-                    'Invalid "asset.phone" defined on transaction: A value bigger than 0');
-        }
-
-        if (!asset.username){
-            throw new Error(
-                    'Invalid "username" defined on transaction: A string value bigger than 0');
-        }
+        }        
         
         if (!asset.price || asset.price <= 0){
             throw new Error(
                     'Invalid "asset.price" defined on transaction: A value bigger than 0');
+        }
+
+        if (!asset.restaurantData || asset.restaurantData.length === 0){
+            throw new Error(
+                    'Invalid "restaurantData" defined on transaction:Not empty');
+        }
+
+        if (!asset.restaurantNonce || asset.restaurantNonce.length === 0){
+            throw new Error(
+                    'Invalid "restaurantNonce" defined on transaction: Not empty');
         }
 
         if (!asset.clientData || asset.clientData.length === 0){

@@ -1,6 +1,7 @@
 const { cryptography, transactions } = require('@liskhq/lisk-client');
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
+const FoodAsset = require('../transactions/FoodAsset');
 const accounts = {
     "genesis": {
       "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
@@ -60,63 +61,12 @@ const getAccountNonce = async(address) => {
         return Number(nonce);
 }
 
-const schema = {
-    $id: 'lisk/food/transaction',
-    type: 'object',
-    required: ["name", "description", "foodType", "price", "deliveryAddress", "phone",
-        "username", "observation", "clientData", "clientNonce"],
-    properties: {
-        name: {
-            dataType: 'string',
-            fieldNumber: 1
-        },
-        description: {
-            dataType: 'string',
-            fieldNumber: 2
-        },
-        foodType: {
-            dataType: 'uint32',
-            fieldNumber: 3
-        },
-        price:{
-            dataType: 'uint64',
-            fieldNumber: 4
-        },
-        deliveryAddress: {
-            dataType: 'string',
-            fieldNumber: 5
-        },
-        phone: {
-            dataType: 'string',
-            fieldNumber: 6
-        },
-        username: {
-            dataType: 'string',
-            fieldNumber: 7
-        },
-        observation: {
-            dataType: 'string',
-            fieldNumber: 8
-        },
-        clientData: {
-            dataType: 'string',
-            fieldNumber: 9
-        },
-        clientNonce: {
-            dataType: 'string',
-            fieldNumber: 10
-        },
-        recipientAddress: {
-            dataType: "bytes",
-            fieldNumber: 11
-        }
-    }
-};
+const schema = new FoodAsset().schema;
 
-const createTransaction = async (address) => {    
+const createTransaction = async (address, recipientPublicKey) => {    
     const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
 
-    const senderPublicKey = cryptography.getAddressAndPublicKeyFromPassphrase(accounts.genesis.passphrase).publicKey;    
+    const senderPublicKey = cryptography.getAddressAndPublicKeyFromPassphrase(accounts.genesis.passphrase).publicKey;        
 
     var name= 'Ribs on the barbie';
     var description = 'delicious 10 ribs on the barbie';
@@ -126,19 +76,23 @@ const createTransaction = async (address) => {
     var username = 'davi';
     var observation = 'none';
 
-    var clientData = cryptography.encryptMessageWithPassphrase(
-        name.concat(' ***Field*** ')
-        .concat(description)
-        .concat(' ***Field*** ')
+    var restaurantData = cryptography.encryptMessageWithPassphrase(
+        name.concat(' ***Field*** ')        
         .concat(deliveryAddress)
+        .concat(' ***Field*** ')        
+        .concat(phone)
         .concat(' ***Field*** ')
-        .concat(foodType)
+        .concat(username),
+        accounts.genesis.passphrase,
+        recipientPublicKey);
+
+    var clientData = cryptography.encryptMessageWithPassphrase(
+        name.concat(' ***Field*** ')        
+        .concat(deliveryAddress)        
         .concat(' ***Field*** ')
         .concat(phone)
         .concat(' ***Field*** ')
-        .concat(username)
-        .concat(' ***Field*** ')
-        .concat(observation),
+        .concat(username),
         accounts.genesis.passphrase,
         senderPublicKey);
 
@@ -154,11 +108,10 @@ const createTransaction = async (address) => {
                 name: name,
                 description: description,
                 foodType: foodType,
-                price: BigInt(transactions.convertLSKToBeddows('50')),
-                deliveryAddress: deliveryAddress,
-                phone: phone,
-                username: username,
+                price: BigInt(transactions.convertLSKToBeddows('50')),                
                 observation: observation,
+                restaurantData: restaurantData.encryptedMessage,
+                restaurantNonce: restaurantData.nonce,
                 clientData: clientData.encryptedMessage,
                 clientNonce: clientData.nonce,
                 recipientAddress: address
@@ -189,7 +142,7 @@ const postResult = async() => {
 
     const address = cryptography.getAddressFromBase32Address(credential.address);
     var objTimeout = setTimeout(async () => {
-        const newTx = await createTransaction(address);
+        const newTx = await createTransaction(address, credential.publicKey);
         var response;
         setInterval(async function(){
             const client = await api.getClient();

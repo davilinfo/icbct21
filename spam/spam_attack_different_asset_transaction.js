@@ -1,6 +1,7 @@
 const { cryptography, transactions } = require('@liskhq/lisk-client');
 const Api = require('./api.js');
 const Account = require('../accounts/CreateAccount');
+const FoodSchema = require('../transactions/FoodAsset');
 const accounts = {
     "genesis": {
       "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
@@ -9,58 +10,7 @@ const accounts = {
 
 const api = new Api();
 
-const schema = {
-    $id: 'lisk/food/transaction',
-    type: 'object',
-    required: ["name", "description", "foodType", "price", "deliveryAddress", "phone",
-        "username", "observation", "clientData", "clientNonce"],
-    properties: {
-        name: {
-            dataType: 'string',
-            fieldNumber: 1
-        },
-        description: {
-            dataType: 'string',
-            fieldNumber: 2
-        },
-        foodType: {
-            dataType: 'uint32',
-            fieldNumber: 3
-        },
-        price:{
-            dataType: 'uint64',
-            fieldNumber: 4
-        },
-        deliveryAddress: {
-            dataType: 'string',
-            fieldNumber: 5
-        },
-        phone: {
-            dataType: 'string',
-            fieldNumber: 6
-        },
-        username: {
-            dataType: 'string',
-            fieldNumber: 7
-        },
-        observation: {
-            dataType: 'string',
-            fieldNumber: 8
-        },
-        clientData: {
-            dataType: 'string',
-            fieldNumber: 9
-        },
-        clientNonce: {
-            dataType: 'string',
-            fieldNumber: 10
-        },
-        recipientAddress: {
-            dataType: "bytes",
-            fieldNumber: 11
-        }
-    }
-};
+const schema = new FoodSchema().schema;
 
 var accountFee = 0.01;
 
@@ -84,7 +34,7 @@ const createAccount = async (nonce) => {
         fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
         nonce: BigInt(nonce),
         asset: {
-            amount: BigInt(700000000),
+            amount: BigInt(900000000),
             recipientAddress: address,
             data: 'ok',
         },
@@ -95,11 +45,11 @@ const createAccount = async (nonce) => {
     return newCredential;
 }
 
-const createTransaction = async (credential, transactionFee, nonce) => {
-    const address = cryptography.getAddressFromPassphrase(accounts.genesis.passphrase);
+const createTransaction = async (credential, transactionFee, nonce) => {    
     const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
 
     const senderPublicKey = cryptography.getAddressAndPublicKeyFromPassphrase(credential.passphrase).publicKey;
+    const recipientAddressAndPublicKey = cryptography.getAddressAndPublicKeyFromPassphrase(accounts.genesis.passphrase);    
 
     var name= 'Ribs on the barbie';
     var description = 'delicious 10 ribs on the barbie';
@@ -109,19 +59,23 @@ const createTransaction = async (credential, transactionFee, nonce) => {
     var username = 'davi';
     var observation = 'none';
 
-    var clientData = cryptography.encryptMessageWithPassphrase(
-        name.concat(' ***Field*** ')
-        .concat(description)
-        .concat(' ***Field*** ')
+    var restaurantData = cryptography.encryptMessageWithPassphrase(
+        name.concat(' ***Field*** ')        
         .concat(deliveryAddress)
-        .concat(' ***Field*** ')
-        .concat(foodType)
-        .concat(' ***Field*** ')
+        .concat(' ***Field*** ')        
         .concat(phone)
         .concat(' ***Field*** ')
-        .concat(username)
+        .concat(username),
+        accounts.genesis.passphrase,
+        recipientAddressAndPublicKey.publicKey);
+
+    var clientData = cryptography.encryptMessageWithPassphrase(
+        name.concat(' ***Field*** ')        
+        .concat(deliveryAddress)
+        .concat(' ***Field*** ')        
+        .concat(phone)
         .concat(' ***Field*** ')
-        .concat(observation),
+        .concat(username),
         accounts.genesis.passphrase,
         senderPublicKey);
 
@@ -137,14 +91,13 @@ const createTransaction = async (credential, transactionFee, nonce) => {
                 name: name,
                 description: description,
                 foodType: foodType,
-                price: BigInt(transactions.convertLSKToBeddows('1')),
-                deliveryAddress: deliveryAddress,
-                phone: phone,
-                username: username,
+                price: BigInt(transactions.convertLSKToBeddows('1')),                
                 observation: observation,
+                restaurantData: restaurantData.encryptedMessage,
+                restaurantNonce: restaurantData.nonce,
                 clientData: clientData.encryptedMessage,
                 clientNonce: clientData.nonce,
-                recipientAddress: address
+                recipientAddress: recipientAddressAndPublicKey.address
             },
         },
         Buffer.from('abb8df9b2a7a09bde37c3d3536e60dcc2102e3ef2bd656fd6b82104ca2871dfd', "hex"),
