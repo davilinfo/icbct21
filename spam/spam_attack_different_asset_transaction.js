@@ -12,7 +12,7 @@ const api = new Api();
 
 const schema = new FoodSchema().schema;
 
-var accountFee = 0.01;
+var accountFee = 0.002;
 
 const getAccountNonce = async(address) => {
     console.log(address);
@@ -119,8 +119,8 @@ const preResult = async() => {
         console.log('transaction nonce:'.concat(nonce));
         var credential = await createAccount(nonce);
         listCredentials.push(credential);
-        accountFee = accountFee + 0.01;
-        accountFee = parseFloat(accountFee.toPrecision(2));
+        accountFee = accountFee + 0.001;
+        accountFee = parseFloat(accountFee.toPrecision(3));
         console.log(accountFee);
         count++;
     }
@@ -139,7 +139,7 @@ const waitToExecuteTransactions = async () =>{
     var countAccounts = 0;
     console.log("accounts: ".concat(listCredentials.length));
     while (listCredentials.length-1 >= 0){
-        transactionFee = 0.01;
+        transactionFee = 0.002;
         var actualCredential = listCredentials.pop();
         console.log(actualCredential);
         console.log("executed accounts:".concat(countAccounts));
@@ -150,7 +150,7 @@ const waitToExecuteTransactions = async () =>{
                 const nonce = await getAccountNonce(cryptography.getAddressFromBase32Address(actualCredential.address)) + countTransactions;
                 await postResult(actualCredential, transactionFee, nonce);
                 countTransactions++;
-                transactionFee = transactionFee + 0.01;
+                transactionFee = transactionFee + 0.001;
                 transactionFee = parseFloat(transactionFee.toPrecision(2));
                 console.log(transactionFee);
             }catch (e){
