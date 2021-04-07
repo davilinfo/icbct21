@@ -5,7 +5,7 @@ const { exception } = require('console');
 const { exit } = require('process');
 const accounts = {
     "genesis": {
-      "passphrase": "peanut hundred pen hawk invite exclude brain chunk gadget wait wrong ready"
+      "passphrase": "elevator favorite unfair layer resist address palm just current inquiry style garage"
     }
 };
 
@@ -33,7 +33,7 @@ const createAccount = async (nonce) => {
         fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
         nonce: BigInt(nonce),
         asset: {
-            amount: BigInt(300000000),
+            amount: BigInt(950000000),
             recipientAddress: address,
             data: 'ok',
         },
@@ -63,27 +63,27 @@ const createTransaction = async (credential, transactionFee, nonce) => {
 }
 
 var listCredentials = [];
-var count = 64;
+var count = 0;
+var totalAccounts = 64;
 
 const preResult = async() => {
-    while (count > 0) {
+    while (count < totalAccounts) {
         const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
         console.log('account nonce:'.concat(accountNonce));
-        count--;
         const nonce = parseInt(accountNonce) + count;
         console.log('transaction nonce:'.concat(nonce));
+        console.log(accountFee);
         var credential = await createAccount(nonce);
         listCredentials.push(credential);
         accountFee = accountFee + 0.01;
         accountFee = parseFloat(accountFee.toPrecision(2));
-        console.log(accountFee);
-
+        count++;
     }
     console.log("concluded accounts preparation");
     console.log("preparing to spam transactions");
 
     var objTimeout = setTimeout(async () => {
-        waitToExecuteTransactions();
+        await waitToExecuteTransactions();
         }, 30000);
 
     objTimeout.ref();
@@ -93,7 +93,7 @@ const waitToExecuteTransactions = async () =>{
     var countTransactions = 0;
     var countAccounts = 0;
     console.log("accounts: ".concat(listCredentials.length));
-    while (listCredentials.length-1 > 0){
+    while (listCredentials.length-1 >= 0){
         transactionFee = 0.01;
         var actualCredential = listCredentials.pop();
         console.log(actualCredential);

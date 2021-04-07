@@ -34,7 +34,7 @@ const createAccount = async (nonce) => {
         fee: BigInt(transactions.convertLSKToBeddows(accountFee.toString())),
         nonce: BigInt(nonce),
         asset: {
-            amount: BigInt(900000000),
+            amount: BigInt(2150000000),
             recipientAddress: address,
             data: 'ok',
         },
@@ -108,13 +108,13 @@ const createTransaction = async (credential, transactionFee, nonce) => {
 
 
 var listCredentials = [];
-var count = 64;
+var totalAccount = 64;
+var count = 0;
 
 const preResult = async() => {
-    while (count > 0) {
+    while (count < totalAccount) {
         const accountNonce = await getAccountNonce(cryptography.getAddressFromPassphrase(accounts.genesis.passphrase));
-        console.log('account nonce:'.concat(accountNonce));
-        count--;
+        console.log('account nonce:'.concat(accountNonce));        
         const nonce = parseInt(accountNonce) + count;
         console.log('transaction nonce:'.concat(nonce));
         var credential = await createAccount(nonce);
@@ -122,13 +122,13 @@ const preResult = async() => {
         accountFee = accountFee + 0.01;
         accountFee = parseFloat(accountFee.toPrecision(2));
         console.log(accountFee);
-
+        count++;
     }
     console.log("concluded accounts preparation");
     console.log("preparing to spam transactions");
 
     var objTimeout = setTimeout(async () => {
-        waitToExecuteTransactions();
+        await waitToExecuteTransactions();
         }, 30000);
 
     objTimeout.ref();
@@ -138,7 +138,7 @@ const waitToExecuteTransactions = async () =>{
     var countTransactions = 0;
     var countAccounts = 0;
     console.log("accounts: ".concat(listCredentials.length));
-    while (listCredentials.length-1 > 0){
+    while (listCredentials.length-1 >= 0){
         transactionFee = 0.01;
         var actualCredential = listCredentials.pop();
         console.log(actualCredential);
