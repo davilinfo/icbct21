@@ -12,15 +12,13 @@ class Api{
         return Api.clientCache;
     };
 
-    async getAccount (
-        address,
-    ) {
+    async getAccount (address){
         const client = await this.getClient();
         const schema = await client.invoke('app:getSchema');
         const account = await client.invoke('app:getAccount', {
             address,
         });
-
+                
         return codec.decodeJSON(schema.account, Buffer.from(account, 'hex'));
     };
 
@@ -35,7 +33,7 @@ class Api{
     async getFoodAssetTransactionByid(transactionId){        
         const client = await this.getClient();        
         
-        return client.transaction.get(Buffer.from(transactionId, 'hex'));
+        return await client.transaction.get(Buffer.from(transactionId, 'hex'));
     }
 
     async getBlockByHeight(height){
@@ -53,10 +51,7 @@ class Api{
     };
 
     async getNodeInfo(){
-        const client = await this.getClient();
-        const schema = await client.invoke('app:getSchema');
-        console.log(schema);
-
+        const client = await this.getClient();        
         const nodeInfo = await client.invoke('app:getNodeInfo', {});
 
         return nodeInfo;
